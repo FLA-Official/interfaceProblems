@@ -3,21 +3,18 @@ package account
 import "errors"
 
 type Account interface {
-	Amount()
-}
-
-type PaymentProcessor interface {
-	pay(amount float64) error
+	NewUser(variable ...interface{}) error
 }
 
 type CreditCardPayment struct {
+	Id         int
 	CardNumber string
 	Expiry     string
 	Cvv        string
 	Amount     float64
 }
 
-func (ccp *CreditCardPayment) pay(amount float64) error {
+func (ccp *CreditCardPayment) NewUser(CardNumber string, Expiry string, Cvv string, initDepo float64) error {
 
 	if ccp.CardNumber == "" && ccp.Expiry == "" && ccp.Cvv == "" {
 		return errors.New("Need valid CardNumber, with proper expiry date and cvv")
@@ -27,12 +24,13 @@ func (ccp *CreditCardPayment) pay(amount float64) error {
 }
 
 type PaypalPayment struct {
+	Id     int
 	Mail   string
 	Pass   string
 	Amount float64
 }
 
-func (pp *PaypalPayment) pay(amount float64) error {
+func (pp *PaypalPayment) NewUser(Mail string, Pass string, initDepo float64) error {
 	return nil
 }
 
